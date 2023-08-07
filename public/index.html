@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<style>
+.container {
+    width: 80%;
+    height: 80%;
+    position: absolute;    
+    margin:auto;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background-color: #aaa;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;  
+    position: absolute;
+    margin:auto;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+</style>
+</head>
+
+<body onload="load()">
+
+<img id="slide">
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+var socket = io();
+var slide_number = 1;
+
+document.onkeypress = function(evt) {
+  evt = evt || window.event;
+  var charCode = evt.keyCode || evt.which;
+  var charStr = String.fromCharCode(charCode);
+  //alert(charStr);
+
+  slide_number += 1;
+  if (slide_number > 5) {
+    slide_number = 1;
+  }
+  console.log(slide_number);
+  //alert(String(slide_number));
+  //msg = String(slide_number);
+  msg = slide_number;
+  socket.emit('chat message', msg);
+  console.log("sent msg: " + msg);
+};
+
+socket.on('chat message', function(msg) {
+  console.log("received msg: " + msg);
+  slide_number = msg;
+  show_slide(slide_number);
+});
+
+//var myVar = setInterval(load, 1000);
+function load() {
+  show_slide(slide_number);
+}
+
+function show_slide(n) {
+  console.log("show slide " + n);
+  if(n == 1) {
+    document.getElementById('slide').src="bird1_1024.jpg";
+  }
+  else if(n == 2) {
+    document.getElementById('slide').src="bird2_1024.jpg";
+  }
+  else if(n == 3) {
+    document.getElementById('slide').src="bird3_1024.jpg";
+  }
+  else if(n == 4) {
+    document.getElementById('slide').src="bird4_1024.jpg";
+  }
+  else if(n == 5) {
+    document.getElementById('slide').src="bird5_1024.jpg";
+  }
+  else {
+  }
+  console.log("show slide " + n + " done");
+}
+
+</script>
+
+</body>
+</html>
